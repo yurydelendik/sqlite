@@ -23,6 +23,12 @@
 #define SQLITE_OMIT_LOAD_EXTENSION 1
 #define SQLITE_ENABLE_LOCKING_STYLE 0
 #define HAVE_UTIME 1
+#elif defined(__wasi__)
+#define OS_VXWORKS 0
+#define SQLITE_OS_OTHER 0
+#define SQLITE_HOMEGROWN_RECURSIVE_MUTEX 1
+#define SQLITE_OMIT_LOAD_EXTENSION 1
+#define SQLITE_ENABLE_LOCKING_STYLE 2
 #else
 /* This is not VxWorks. */
 #define OS_VXWORKS 0

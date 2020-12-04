@@ -1479,6 +1479,7 @@ clean:
 	rm -f sqldiff sqldiff.exe
 	rm -f dbhash dbhash.exe
 	rm -f fts5.* fts5parse.*
+	rm -f playground.wasm
 
 distclean:	clean
 	rm -f config.h config.log config.status libtool Makefile sqlite3.pc
@@ -1500,3 +1501,12 @@ sqlite3.def: $(REAL_LIBOBJ)
 sqlite3.dll: $(REAL_LIBOBJ) sqlite3.def
 	$(TCC) -shared -o $@ sqlite3.def \
 		-Wl,"--strip-all" $(REAL_LIBOBJ)
+
+
+playground.wasm: $(TOP)/playground.c sqlite3.c
+	$(LTLINK) -o $@ \
+	$(TOP)/playground.c sqlite3.c \
+	$(TLIBS) -rpath "$(libdir)" \
+	-nostartfiles \
+	-Wl,--allow-undefined \
+	-Wl,--export=alloc_mem,--export=free_mem,--export=init_db,--export=destroy_db,--export=exec_cmd,--export=get_last_error

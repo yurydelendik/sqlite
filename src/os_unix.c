@@ -44,7 +44,7 @@
 **      plus implementations of sqlite3_os_init() and sqlite3_os_end().
 */
 #include "sqliteInt.h"
-#if SQLITE_OS_UNIX              /* This file is used on unix only */
+#if SQLITE_OS_UNIX && !defined(__wasi__) /* This file is used on unix only */
 
 /*
 ** There are various methods for file locking used for concurrency
@@ -8041,5 +8041,7 @@ int sqlite3_os_end(void){
   unixBigLock = 0;
   return SQLITE_OK; 
 }
- 
+
+#elif __wasm32__
+int sqlite3_os_init(void){ return SQLITE_OK; } 
 #endif /* SQLITE_OS_UNIX */
